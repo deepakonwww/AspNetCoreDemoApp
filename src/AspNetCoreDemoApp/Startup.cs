@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.OpenApi.Models;
 using System;
 
 namespace AspNetCoreDemoApp
@@ -19,6 +20,16 @@ namespace AspNetCoreDemoApp
                         .AllowAnyMethod()
                         .AllowAnyHeader());
                 });
+
+            // Register our Swagger generator
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "AspNet Core 5.0 Demo API",
+                    Version = "v1"
+                });
+            });
 
             services.Configure<ForwardedHeadersOptions>(options =>
             {
