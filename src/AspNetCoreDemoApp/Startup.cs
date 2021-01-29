@@ -13,6 +13,7 @@ namespace AspNetCoreDemoApp
             services
                 .AddHttpsRedirection(options => { options.HttpsPort = 443; })
                 .AddMvcCore()
+                .AddApiExplorer()
                 .AddCors(options =>
                 {
                     options.AddPolicy("CorsPolicy",
@@ -44,12 +45,22 @@ namespace AspNetCoreDemoApp
         {
             app.UseForwardedHeaders();
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.),
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AspNet Core 5.0 Demo API v1");
+            });
+
             if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DYNO")))
             {
                 Console.WriteLine("Use https redirection");
                 app.UseHttpsRedirection();
             }
-
+            
             app
                 .UseRouting()
                 .UseDefaultFiles()
